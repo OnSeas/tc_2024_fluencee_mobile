@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:tc_2024_fluencee_mobile/alertas/snackbar.dart';
+import 'package:tc_2024_fluencee_mobile/api/api-service.dart';
 import 'package:tc_2024_fluencee_mobile/api/login-service.dart';
 import 'package:tc_2024_fluencee_mobile/api/usuario-service.dart';
+import 'package:tc_2024_fluencee_mobile/components/usuario/perfil-info.dart';
 import 'package:tc_2024_fluencee_mobile/models/Usuario.dart';
-
-import '../routes/app-routes.dart';
+import 'package:tc_2024_fluencee_mobile/routes/app-routes.dart';
 
 final UsuarioService usuarioService = UsuarioService();
 final LoginService loginService = LoginService();
@@ -35,6 +37,7 @@ class _TelaTurmasState extends State<TelaTurmas> {
           return CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Erro ao carregar usuário: ${snapshot.error}');
+          // TODO voltar para a página de login e retornar mensagem
         } else if (snapshot.hasData) {
           return Scaffold(
             appBar: AppBar(
@@ -45,8 +48,22 @@ class _TelaTurmasState extends State<TelaTurmas> {
                 PopupMenuButton<String>(
                   onSelected: (value) {
                     if (value == 'perfil') {
-                      Navigator.pushNamed(context, AppRoutes.TELA_PERFIL);
-                    } else if (value == 'sair') {}
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                PerfilInfo(usuario: snapshot.data!),
+                          )).then((value) => _atualizarUsuario());
+                    } else if (value == 'sair') {
+                      ApiService.deslogarUsuario().then((value) =>
+                          Navigator.popAndPushNamed(
+                              context, AppRoutes.TELA_LOGIN));
+                      CustomSnackBar(
+                              context: context,
+                              message: "Você saiu da sua conta!",
+                              isError: false)
+                          .show();
+                    }
                   },
                   itemBuilder: (BuildContext context) => [
                     const PopupMenuItem<String>(
@@ -80,5 +97,11 @@ class _TelaTurmasState extends State<TelaTurmas> {
         }
       },
     );
+  }
+
+  void _atualizarUsuario() {
+    setState(() {
+      _usuarioFuture = usuarioService.buscarUsuario();
+    });
   }
 }

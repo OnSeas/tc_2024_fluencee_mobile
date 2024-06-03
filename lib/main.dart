@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tc_2024_fluencee_mobile/pages/tela1-login.dart';
-import 'package:tc_2024_fluencee_mobile/pages/tela3-listar-turmas.dart';
-import 'package:tc_2024_fluencee_mobile/pages/tela4-perfil.dart';
+import 'package:tc_2024_fluencee_mobile/pages/tela-login.dart';
+import 'package:tc_2024_fluencee_mobile/pages/tela-listar-turmas.dart';
 import 'package:tc_2024_fluencee_mobile/routes/app-routes.dart';
 
-import 'pages/tela2-cadastro.dart';
+import 'pages/tela-cadastro.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,9 +48,6 @@ class MyApp extends StatelessWidget {
         AppRoutes.TELA_LOGIN: (context) => const TelaLogin(),
         AppRoutes.TELA_CADASTRO: (context) => const TelaCadastro(),
         AppRoutes.TELA_TURMAS: (context) => const TelaTurmas(),
-        // AppRoutes.TELA_PERFIL: (context) => const TelaPerfil(),
-        //AppRoutes.TELA_TROCAR_SENHA: (context) => const TelaTrocarSenha(),
-        //AppRoutes.TELA_EXCLUIR_CONTA: (context) => const TelaExcluirConta(),
       },
     );
   }

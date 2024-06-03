@@ -1,7 +1,4 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tc_2024_fluencee_mobile/api/usuario-service.dart';
-import 'package:tc_2024_fluencee_mobile/models/Usuario.dart';
-import 'package:tc_2024_fluencee_mobile/pages/tela3-listar-turmas.dart';
 
 class ApiService {
   // apiUrl geral
@@ -28,5 +25,9 @@ class ApiService {
         await SharedPreferences.getInstance();
 
     sharedPreferences.setString(tokenKey, token);
+  }
+
+  static Future<void> deslogarUsuario() async {
+    setTokenUsuario("");
   }
 }

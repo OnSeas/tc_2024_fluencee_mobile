@@ -1,17 +1,12 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tc_2024_fluencee_mobile/alertas/snackbar.dart';
 import 'package:tc_2024_fluencee_mobile/api/api-service.dart';
 import 'package:tc_2024_fluencee_mobile/interceptor/dio-interceptor.dart';
 import 'package:tc_2024_fluencee_mobile/models/Usuario.dart';
 
-import '../alertas/alertas.dart';
 import '../models/Login.dart';
 
 class LoginService {
-  final Alertas alerta = Alertas();
-
   late Dio dio;
 
   LoginService() {
@@ -25,8 +20,43 @@ class LoginService {
   }
 
   // Cadastrar
-  Future<void> cadastrar(context, Usuario usuario) async {
-    // TODO
+  Future<bool> cadastrar(context, Usuario usuario) async {
+    Map<String, dynamic> data = {
+      'nome': usuario.nome,
+      'email': usuario.email,
+      'senha': usuario.senha
+    };
+
+    dio.options.contentType = 'application/json';
+
+    try {
+      final Response res = await dio.post("/cadastrar", data: data);
+
+      if (res.statusCode == 200) {
+        CustomSnackBar(
+                context: context,
+                message: "Cadastro efetuado com sucesso!",
+                isError: false)
+            .show();
+        return true;
+      } else if (res.statusCode == 400 || res.statusCode == 404) {
+        CustomSnackBar(context: context, message: res.data, isError: true)
+            .show();
+        return false;
+      } else {
+        throw Exception(
+            'Não foi possível se conectar com a aplicação, por favor tente novamente mais tarde!');
+      }
+    } catch (e) {
+      print('Erro na solicitação: $e');
+      CustomSnackBar(
+              context: context,
+              message:
+                  'Não foi possível se conectar com a aplicação, por favor tente novamente mais tarde!',
+              isError: true)
+          .show();
+      return false;
+    }
   }
 
   // Login
@@ -45,26 +75,35 @@ class LoginService {
         final String token = res.data['token'];
         ApiService.setTokenUsuario(token);
 
-        await alerta.messageAlertDialog(
-            context, "Bem-vindo", "Login efetuado com sucesso!");
+        CustomSnackBar(
+                context: context,
+                message: "Login realizado com sucesso",
+                isError: false)
+            .show();
+        return true;
+      } else if (res.statusCode == 400 || res.statusCode == 404) {
+        CustomSnackBar(context: context, message: res.data, isError: true)
+            .show();
+        return false;
+      } else if (res.statusCode == 403) {
+        CustomSnackBar(
+                context: context,
+                message: "Login incorreto, por favor tente novamente!",
+                isError: true)
+            .show();
+        return false;
       } else {
-        print("Erro ao realizar login - status: ${res.statusCode}");
-        await alerta.messageAlertDialog(context, "Essa não!",
-            "Não foi possível realizar o login, parece que nosso sistema não está funcionando no momento, desculpe.");
-        throw Exception('Erro ao realizar login: ${res.data}');
+        throw Exception(
+            'Não foi possível se conectar com a aplicação, por favor tente novamente mais tarde!');
       }
-      return true;
-    } on DioException catch (e) {
-      print('Dio error: $e');
-      if (e.response != null) {
-        print('Dio error response: ${e.response?.data}');
-      }
-      await alerta.messageAlertDialog(context, "Erro", "${e.response?.data}");
-      return false;
     } catch (e) {
-      print('Other error: $e');
-      await alerta.messageAlertDialog(context, "Erro",
-          "Não foi possível se conectar com a aplicação, por favor tente novamente mais tarde!");
+      print('Erro na solicitação: $e');
+      CustomSnackBar(
+              context: context,
+              message:
+                  'Não foi possível se conectar com a aplicação, por favor tente novamente mais tarde!',
+              isError: true)
+          .show();
       return false;
     }
   }

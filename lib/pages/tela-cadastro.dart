@@ -276,8 +276,10 @@ class _TelaCadastroState extends State<TelaCadastro> {
                                                 email: _emailController.text,
                                                 senha: _senhaController.text,
                                               ))
-                                          .then((usuario) {
-                                        Navigator.pop(context);
+                                          .then((value) {
+                                        if (value == true) {
+                                          Navigator.pop(context);
+                                        }
                                       });
                                     }
                                   },

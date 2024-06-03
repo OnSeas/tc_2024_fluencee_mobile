@@ -132,7 +132,8 @@ class _TelaLoginState extends State<TelaLogin> {
                                     if (value!.isEmpty) {
                                       return 'Por favor preencha o campo Senha!';
                                     }
-                                    return null;
+                                    if (value!.length > 35 || value!.length < 8)
+                                      return 'A senha deve ter entre 8 e 35 caracteres!';
                                   },
                                 ),
                               ),
