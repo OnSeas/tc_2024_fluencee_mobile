@@ -2,17 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:tc_2024_fluencee_mobile/alertas/snackbar.dart';
 import 'package:tc_2024_fluencee_mobile/api/api-service.dart';
 import 'package:tc_2024_fluencee_mobile/interceptor/dio-interceptor.dart';
-import 'package:tc_2024_fluencee_mobile/models/Usuario.dart';
+import 'package:tc_2024_fluencee_mobile/models/Turma.dart';
 import 'package:tc_2024_fluencee_mobile/utils/resposta.dart';
 
-import '../models/Login.dart';
-
-class LoginService {
+class TurmasService {
   late Dio dio;
 
-  LoginService() {
+  TurmasService() {
     dio = Dio(BaseOptions(
-      baseUrl: ApiService.apiUrl,
+      baseUrl: '${ApiService.apiUrl}/turma',
       validateStatus: (status) {
         return true;
       },
@@ -20,32 +18,35 @@ class LoginService {
     dio.interceptors.add(DioInterceptor());
   }
 
-  // Cadastrar
-  Future<Resposta> cadastrar(context, Usuario usuario) async {
+  // Criar turmas
+  Future<Resposta> cadastrar(context, Turma turma) async {
     Resposta resposta = Resposta();
 
     Map<String, dynamic> data = {
-      'nome': usuario.nome,
-      'email': usuario.email,
-      'senha': usuario.senha
+      'nome': turma.nome,
+      if (turma.ano != null) 'ano': turma.ano,
+      if (turma.sala != null) 'sala': turma.sala
     };
 
     dio.options.contentType = 'application/json';
 
     try {
-      final Response res = await dio.post("/cadastrar", data: data);
+      final Response res = await dio.post("/criar", data: data);
 
       if (res.statusCode == 200) {
         CustomSnackBar(
                 context: context,
-                message: "Cadastro efetuado com sucesso!",
+                message: "Turma criada com sucesso!",
                 isError: false)
             .show();
+
         resposta.resultado = Resposta.SUCESS;
+        resposta.object = Turma(id: res.data['id'], nome: res.data['nome']);
         return resposta;
       } else if (res.statusCode == 400 || res.statusCode == 404) {
         CustomSnackBar(context: context, message: res.data, isError: true)
             .show();
+
         resposta.resultado = Resposta.ERROR;
         return resposta;
       } else {
@@ -65,54 +66,77 @@ class LoginService {
     }
   }
 
-  // Login
-  Future<Resposta> login(context, Login login) async {
+  // Listar turmas do usuário
+  Future<Resposta> ListarTurmas(context) async {
     Resposta resposta = Resposta();
-
-    Map<String, dynamic> data = {
-      'login': login.login,
-      'senha': login.senha,
-    };
 
     dio.options.contentType = 'application/json';
 
     try {
-      final Response res = await dio.post("/login", data: data);
+      final Response res = await dio.get("/listar");
 
       if (res.statusCode == 200) {
-        final String token = res.data['token'];
-        ApiService.setTokenUsuario(token);
+        List<dynamic> dataList = res.data;
+        List<Turma> turmasUsuario = Turma.fromJsonList(dataList);
 
-        CustomSnackBar(
-                context: context,
-                message: "Login realizado com sucesso",
-                isError: false)
-            .show();
-
+        resposta.object = turmasUsuario;
         resposta.resultado = Resposta.SUCESS;
         return resposta;
-      } else if (res.statusCode == 400 ||
-          res.statusCode == 404 ||
-          res.statusCode == 403 ||
-          res.statusCode == 401) {
+      } else if (res.statusCode == 400 || res.statusCode == 404) {
         CustomSnackBar(context: context, message: res.data, isError: true)
             .show();
+
         resposta.resultado = Resposta.ERROR;
         return resposta;
       } else {
-        throw Exception(res.statusCode.toString() +
-            'Não foi possível se conectar com a aplicação, por favor tente novamente mais tarde!');
+        throw Exception(res.statusCode.toString() + ": Erro ao buscar turmas.");
       }
-    } on DioException {
+    } catch (e) {
+      print('error: $e');
       CustomSnackBar(
               context: context,
               message:
-                  'Não foi possível se conectar com a aplicação, por favor tente novamente mais tarde!',
+                  "Não foi possível se conectar com a aplicação, por favor tente novamente mais tarde",
               isError: true)
           .show();
       resposta.resultado = Resposta.FATAL_ERROR;
       return resposta;
+    }
+  }
+
+  // entrar em uma turma
+  Future<Resposta> entrarTurma(context, String codigo) async {
+    Resposta resposta = Resposta();
+
+    String data = codigo;
+
+    dio.options.contentType = 'application/json';
+
+    try {
+      final Response res = await dio.post("/entrarTurma", data: data);
+
+      if (res.statusCode == 200) {
+        CustomSnackBar(
+                context: context,
+                message: "Você foi adicionado a turma " + res.data['nome'],
+                isError: false)
+            .show();
+
+        resposta.resultado = Resposta.SUCESS;
+        resposta.object = Turma(id: res.data['id'], nome: res.data['nome']);
+        return resposta;
+      } else if (res.statusCode == 400 || res.statusCode == 404) {
+        CustomSnackBar(context: context, message: res.data, isError: true)
+            .show();
+
+        resposta.resultado = Resposta.ERROR;
+        return resposta;
+      } else {
+        throw Exception(
+            'Não foi possível se conectar com a aplicação, por favor tente novamente mais tarde!');
+      }
     } catch (e) {
+      print('Erro na solicitação: $e');
       CustomSnackBar(
               context: context,
               message:

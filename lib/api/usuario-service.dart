@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:tc_2024_fluencee_mobile/alertas/snackbar.dart';
 import 'package:tc_2024_fluencee_mobile/api/api-service.dart';
 import 'package:tc_2024_fluencee_mobile/interceptor/dio-interceptor.dart';
-import 'package:tc_2024_fluencee_mobile/models/TrocarSenha.dart';
 import 'package:tc_2024_fluencee_mobile/models/Usuario.dart';
 import 'package:tc_2024_fluencee_mobile/utils/resposta.dart';
 
@@ -38,10 +37,7 @@ class UsuarioService {
       }
     } catch (e) {
       print('rror: $e');
-      return Usuario(
-          idUsuario: -1,
-          nome: "nome",
-          email: "email"); // TODO generico de erro que volta para o login.
+      return Usuario(idUsuario: -1, nome: "nome", email: "email");
     }
   }
 

@@ -12,6 +12,8 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  static const double appBarHeight = 0.08;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,6 +36,11 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(
           titleLarge: TextStyle(
             fontSize: 40,
+            //fontWeight: FontWeight.bold,
+            fontFamily: 'Alata',
+          ),
+          titleSmall: TextStyle(
+            fontSize: 22,
             //fontWeight: FontWeight.bold,
             fontFamily: 'Alata',
           ),

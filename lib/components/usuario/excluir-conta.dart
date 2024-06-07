@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tc_2024_fluencee_mobile/api/api-service.dart';
 import 'package:tc_2024_fluencee_mobile/api/usuario-service.dart';
+import 'package:tc_2024_fluencee_mobile/main.dart';
 import 'package:tc_2024_fluencee_mobile/models/Usuario.dart';
 import 'package:tc_2024_fluencee_mobile/routes/app-routes.dart';
 
@@ -39,7 +40,7 @@ class _TelaExcluirContaState extends State<TelaExcluirConta> {
           left: 0,
           right: 0,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.1,
+            height: MediaQuery.of(context).size.height * MyApp.appBarHeight,
             color: Theme.of(context).canvasColor,
             child: ListTile(
               title: Align(

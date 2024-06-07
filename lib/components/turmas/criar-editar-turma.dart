@@ -1,33 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:tc_2024_fluencee_mobile/api/api-service.dart';
-import 'package:tc_2024_fluencee_mobile/api/usuario-service.dart';
+import 'package:tc_2024_fluencee_mobile/api/turmas-service.dart';
 import 'package:tc_2024_fluencee_mobile/main.dart';
+import 'package:tc_2024_fluencee_mobile/models/Turma.dart';
 import 'package:tc_2024_fluencee_mobile/routes/app-routes.dart';
 
-class TelaTrocarSenha extends StatefulWidget {
-  const TelaTrocarSenha({super.key});
+class EditarTurma extends StatefulWidget {
+  final Turma turma;
+
+  const EditarTurma({Key? key, required this.turma}) : super(key: key);
 
   @override
-  State<TelaTrocarSenha> createState() => _TelaTrocarSenhaState();
+  State<EditarTurma> createState() => _EditarTurmaState();
 }
 
-class _TelaTrocarSenhaState extends State<TelaTrocarSenha> {
+class _EditarTurmaState extends State<EditarTurma> {
+  final TurmasService turmasService = TurmasService();
   final _form = GlobalKey<FormState>();
 
-  bool _showPassword = false;
-  bool _showNewPassword = false;
-
-  final _senhaAntigaController = TextEditingController();
-  final _senhaNovaController = TextEditingController();
-  final _confirmSenhaController = TextEditingController();
-
-  final UsuarioService usuarioService = UsuarioService();
+  final _nomeController = TextEditingController();
+  final _anoController = TextEditingController();
+  final _salaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(children: [
-      // App bar
       Positioned(
         top: 0,
         left: 0,
@@ -35,29 +33,6 @@ class _TelaTrocarSenhaState extends State<TelaTrocarSenha> {
         child: Container(
           height: MediaQuery.of(context).size.height * MyApp.appBarHeight,
           color: Theme.of(context).canvasColor,
-          child: ListTile(
-            title: Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: GestureDetector(
-                  onTap: () {
-                    // Ação ao pressionar o nome do usuário
-                  },
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'Osmar', // TODO mudar para colocar o do usuário logado
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            fontSize: 20,
-                          ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
         ),
       ),
 
@@ -74,7 +49,7 @@ class _TelaTrocarSenhaState extends State<TelaTrocarSenha> {
         ),
       ),
 
-      // Fundo com caixas de texto e botões
+      // Conteudo da página
       Positioned(
         top: MediaQuery.of(context).size.height * 0.1,
         left: 0,
@@ -92,12 +67,12 @@ class _TelaTrocarSenhaState extends State<TelaTrocarSenha> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Olá!',
+                    'Criar Turma',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                   Text(
-                    'Para redefinir sua senha preencha os dados abaixo.',
+                    'Preencha os dados abaixo para criar sua turma: ',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.1),
@@ -113,32 +88,19 @@ class _TelaTrocarSenhaState extends State<TelaTrocarSenha> {
                             height: MediaQuery.of(context).size.height * 0.08,
                             child: TextFormField(
                               style: Theme.of(context).textTheme.bodyLarge,
-                              controller: _senhaAntigaController,
-                              obscureText: !_showPassword,
+                              controller: _nomeController,
                               decoration: InputDecoration(
-                                labelText: 'Senha Antiga*',
+                                labelText: 'Nome *',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
-                                ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _showPassword
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _showPassword = !_showPassword;
-                                    });
-                                  },
                                 ),
                               ),
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'Por favor preencha o campo Email!';
-                                } else if (value.length < 8 ||
-                                    value.length > 35) {
-                                  return 'A senha deve ter entre 8 e 35 caracteres!';
+                                  return 'Por favor preencha o campo Nome!';
+                                } else if (value.length < 4 ||
+                                    value.length > 40) {
+                                  return 'Nome da turma deve ter entre 4 e 40 caracteres';
                                 }
                                 return null;
                               },
@@ -150,36 +112,18 @@ class _TelaTrocarSenhaState extends State<TelaTrocarSenha> {
                             height: MediaQuery.of(context).size.height * 0.08,
                             child: TextFormField(
                               style: Theme.of(context).textTheme.bodyLarge,
-                              controller: _senhaNovaController,
-                              obscureText: !_showNewPassword,
+                              controller: _anoController,
                               decoration: InputDecoration(
-                                labelText: 'Nova senha *',
+                                labelText: 'Ano',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
                                 ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _showNewPassword
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _showNewPassword = !_showNewPassword;
-                                    });
-                                  },
-                                ),
                               ),
                               validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Por favor preencha o campo Senha!';
-                                } else if (value.length < 8 ||
-                                    value.length > 35) {
-                                  return 'A senha deve ter entre 8 e 35 caracteres!';
-                                } else if (!RegExp(
-                                        r"^(?=.*[a-zA-Z])(?=.*\d).*$")
-                                    .hasMatch(value)) {
-                                  return 'A senha deve ter no mínimo 1 letra e 1 número!';
+                                if (value!.isNotEmpty) {
+                                  if (value.length > 40) {
+                                    return 'Ano deve ter menos que 40 caracteres';
+                                  }
                                 }
                                 return null;
                               },
@@ -191,32 +135,18 @@ class _TelaTrocarSenhaState extends State<TelaTrocarSenha> {
                             height: MediaQuery.of(context).size.height * 0.08,
                             child: TextFormField(
                               style: Theme.of(context).textTheme.bodyLarge,
-                              controller: _confirmSenhaController,
-                              obscureText: !_showNewPassword,
+                              controller: _salaController,
                               decoration: InputDecoration(
-                                labelText: 'Confirmar nova senha *',
+                                labelText: 'Sala',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(15),
                                 ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _showNewPassword
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _showNewPassword = !_showNewPassword;
-                                    });
-                                  },
-                                ),
                               ),
                               validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Por favor preencha o campo Confirmar senha!';
-                                } else if (!(_senhaNovaController.text ==
-                                    value)) {
-                                  return 'As senhas não são iguais!';
+                                if (value!.isNotEmpty) {
+                                  if (value.length > 40) {
+                                    return 'Sala deve ter menos que 40 caracteres';
+                                  }
                                 }
                                 return null;
                               },
@@ -230,10 +160,15 @@ class _TelaTrocarSenhaState extends State<TelaTrocarSenha> {
                               onPressed: () {
                                 if (_form.currentState!.validate()) {
                                   _form.currentState!.save();
-                                  usuarioService.TrocarSenha(
+
+                                  turmasService
+                                      .cadastrar(
                                           context,
-                                          _senhaAntigaController.text,
-                                          _senhaNovaController.text)
+                                          Turma(
+                                              id: -1,
+                                              nome: _nomeController.text,
+                                              ano: _anoController.text,
+                                              sala: _salaController.text))
                                       .then((resposta) => {
                                             if (resposta.isSucess())
                                               {Navigator.pop(context)}
@@ -257,7 +192,7 @@ class _TelaTrocarSenhaState extends State<TelaTrocarSenha> {
                                 ),
                               ),
                               child: Text(
-                                'Trocar de senha',
+                                'Criar turma',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

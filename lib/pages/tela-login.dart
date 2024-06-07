@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tc_2024_fluencee_mobile/api/login-service.dart';
 import 'package:tc_2024_fluencee_mobile/models/Login.dart';
 import 'package:tc_2024_fluencee_mobile/routes/app-routes.dart';
+import 'package:tc_2024_fluencee_mobile/utils/resposta.dart';
 
 class TelaLogin extends StatefulWidget {
   const TelaLogin({super.key});
@@ -153,8 +154,8 @@ class _TelaLoginState extends State<TelaLogin> {
                                                 login: _loginController.text,
                                                 senha: _senhaController.text,
                                               ))
-                                          .then((value) => {
-                                                if (value == true)
+                                          .then((resposta) => {
+                                                if (resposta.isSucess())
                                                   {
                                                     Navigator.pushNamed(context,
                                                         AppRoutes.TELA_TURMAS)
