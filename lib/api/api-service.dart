@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiService {
   // apiUrl geral
   static const apiUrl =
-      'http://192.168.3.8:8080/fluencee'; // Lembrar de sempre alterar o IP
+      'http://0.0.0.0:8080/fluencee'; // MUDAR 0.0.0.0 PARA IPV4 DE SUA REDE SE FOR UTILIZAR
 
   static const String tokenKey = "LOGINTOKEN";
 
