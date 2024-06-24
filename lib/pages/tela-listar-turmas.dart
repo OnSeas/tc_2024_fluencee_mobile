@@ -7,6 +7,7 @@ import 'package:tc_2024_fluencee_mobile/api/login-service.dart';
 import 'package:tc_2024_fluencee_mobile/api/turmas-service.dart';
 import 'package:tc_2024_fluencee_mobile/api/usuario-service.dart';
 import 'package:tc_2024_fluencee_mobile/components/turmas/criar-editar-turma.dart';
+import 'package:tc_2024_fluencee_mobile/components/turmas/turma-tile.dart';
 import 'package:tc_2024_fluencee_mobile/components/usuario/perfil-info.dart';
 import 'package:tc_2024_fluencee_mobile/models/Turma.dart';
 import 'package:tc_2024_fluencee_mobile/models/Usuario.dart';
@@ -165,11 +166,8 @@ class _TelaTurmasState extends State<TelaTurmas> {
 
                           return ListView.builder(
                             itemCount: turmasSnapshot.data!.length,
-                            itemBuilder: ((context, i) => ListTile(
-                                  title: Text(
-                                      turmasSnapshot.data!.elementAt(i).nome!),
-                                  // TODO construir o tile de turma
-                                )),
+                            itemBuilder: ((context, i) => TurmaTile(
+                                turma: turmasSnapshot.data!.elementAt(i))),
                           );
                         },
                       ),
@@ -288,7 +286,7 @@ class _TelaTurmasState extends State<TelaTurmas> {
     // O dialogo
     AlertDialog alert = AlertDialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
+        borderRadius: BorderRadius.circular(15.0),
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       content: Padding(
@@ -359,7 +357,7 @@ class _TelaTurmasState extends State<TelaTurmas> {
     // O dialogo
     AlertDialog alert = AlertDialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
+        borderRadius: BorderRadius.circular(15.0),
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       content: Padding(

@@ -4,7 +4,6 @@ class Usuario {
   final String email;
   final String? senha;
   final bool? ativado;
-  final String? token;
 
   Usuario(
       // Construtor
@@ -12,8 +11,7 @@ class Usuario {
       required this.nome,
       required this.email,
       this.senha,
-      this.ativado,
-      this.token});
+      this.ativado});
 
   factory Usuario.fromJson(Map<String, dynamic> json) {
     // Conversão entre jason e usuario
@@ -22,7 +20,6 @@ class Usuario {
         nome: (json['nome'] as String),
         email: (json['email'] as String),
         senha: (json['senha'] as String?),
-        ativado: (json['ativado'] as bool?),
-        token: (json['token'] as String?));
+        ativado: (json['ativado'] as bool?));
   }
 }

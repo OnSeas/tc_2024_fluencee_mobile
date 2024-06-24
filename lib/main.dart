@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   static const double appBarHeight = 0.08;
+  static const double bottomAppBarHeight = 0.08;
 
   @override
   Widget build(BuildContext context) {
@@ -34,18 +35,32 @@ class MyApp extends StatelessWidget {
         ),
 
         textTheme: const TextTheme(
+          headlineSmall: TextStyle(
+            fontSize: 30,
+            //fontWeight: FontWeight.bold,
+            fontFamily: 'Alata',
+          ),
           titleLarge: TextStyle(
             fontSize: 40,
             //fontWeight: FontWeight.bold,
             fontFamily: 'Alata',
           ),
-          titleSmall: TextStyle(
+          titleMedium: TextStyle(
             fontSize: 22,
+            //fontWeight: FontWeight.bold,
+            fontFamily: 'Alata',
+          ),
+          titleSmall: TextStyle(
+            fontSize: 18,
             //fontWeight: FontWeight.bold,
             fontFamily: 'Alata',
           ),
           bodyLarge: TextStyle(
             fontSize: 16,
+            fontFamily: 'Assistant',
+          ),
+          bodyMedium: TextStyle(
+            fontSize: 14,
             fontFamily: 'Assistant',
           ),
         ),

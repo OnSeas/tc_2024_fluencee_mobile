@@ -6,19 +6,19 @@ class Turma {
   final String? codigo;
   final bool? ativado;
   final bool? eProfessor;
+  final String? professorNome;
 
-  Turma({
-    required this.id,
-    this.nome,
-    this.ano,
-    this.sala,
-    this.codigo,
-    this.ativado,
-    this.eProfessor,
-  });
+  Turma(
+      {required this.id,
+      this.nome,
+      this.ano,
+      this.sala,
+      this.codigo,
+      this.ativado,
+      this.eProfessor,
+      this.professorNome});
 
   factory Turma.fromJson(Map<String, dynamic> json) {
-    // Conversão entre jason e usuario
     return Turma(
       id: (json['id'] as int),
       nome: (json['nome'] as String),
@@ -26,7 +26,8 @@ class Turma {
       ano: (json['ano'] as String?),
       ativado: (json['ativado'] as bool?),
       codigo: (json['codigo'] as String?),
-      eProfessor: (json['eProfessor'] as bool?),
+      eProfessor: (json['eprofessor'] as bool?),
+      professorNome: (json['professorNome'] as String?),
     );
   }
 

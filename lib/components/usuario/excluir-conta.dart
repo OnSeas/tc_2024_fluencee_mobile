@@ -259,7 +259,7 @@ class _TelaExcluirContaState extends State<TelaExcluirConta> {
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 25.0),
       ),
       child: Text(
-        "Delete",
+        "Deletar",
         style: Theme.of(context).textTheme.bodyLarge,
       ),
       onPressed: () {
@@ -278,7 +278,7 @@ class _TelaExcluirContaState extends State<TelaExcluirConta> {
     // O dialogo
     AlertDialog alert = AlertDialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
+        borderRadius: BorderRadius.circular(15.0),
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       content: Padding(
