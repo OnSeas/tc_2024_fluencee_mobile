@@ -212,7 +212,7 @@ class _PerfilInfoState extends State<PerfilInfo> {
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   subtitle: Text(
-                    widget.usuario.email,
+                    widget.usuario.email!,
                     style: Theme.of(context)
                         .textTheme
                         .bodyLarge!

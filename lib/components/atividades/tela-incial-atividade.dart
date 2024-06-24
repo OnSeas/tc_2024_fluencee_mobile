@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tc_2024_fluencee_mobile/api/atividades-service.dart';
+import 'package:tc_2024_fluencee_mobile/components/correcoes/listar-usuarios-resposta.dart';
 import 'package:tc_2024_fluencee_mobile/components/questoes/questoes-responder.dart';
 import 'package:tc_2024_fluencee_mobile/main.dart';
 import 'package:tc_2024_fluencee_mobile/models/Atividade.dart';
@@ -136,6 +137,42 @@ class _TelaInicioAtividadeState extends State<TelaInicioAtividade> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 20.0),
+                  if (widget.turma.eProfessor! && widget.atividade.status! > 1)
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.75,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UsuarioResposta(
+                                      atividade: widget.atividade,
+                                    )),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        child: Text(
+                          'Corrigir',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .fontFamily,
+                            color: Theme.of(context).canvasColor,
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
