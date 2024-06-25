@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tc_2024_fluencee_mobile/api/resposta-service.dart';
+import 'package:tc_2024_fluencee_mobile/components/correcoes/RespostasQuestoes.dart';
 import 'package:tc_2024_fluencee_mobile/main.dart';
 import 'package:tc_2024_fluencee_mobile/models/Atividade.dart';
 import 'package:tc_2024_fluencee_mobile/models/EstudanteGrupo.dart';
@@ -92,10 +92,18 @@ class _UsuarioRespostaState extends State<UsuarioResposta> {
                             ),
                             child: ListTile(
                               title: Text(estudanteGrupo.estudante.nome!),
-                              trailing: Icon(
-                                Icons.verified,
-                                color: Colors.green,
-                              ),
+                              trailing: Icon(Icons.assignment_turned_in,
+                                  color: Theme.of(context).colorScheme.primary),
+                              onTap: () {
+                                Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                RespostaQuestao(
+                                                    estudanteGrupo:
+                                                        estudanteGrupo)))
+                                    .then((value) => _atualizarPagina());
+                              },
                             ),
                           );
                         },
